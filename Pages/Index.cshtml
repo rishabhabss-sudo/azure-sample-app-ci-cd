@@ -1,0 +1,103 @@
+﻿@page
+@model IndexModel
+@using Microsoft.AspNetCore.Http
+
+<div class="container mt-4">
+
+    <!-- ===================== -->
+    <!-- 🛒 PRODUCT LIST -->
+    <!-- ===================== -->
+    <h1 class="mb-3">🛒 Product List</h1>
+
+    <form method="post">
+        <button type="submit" class="btn btn-primary mb-3">
+            Load Products
+        </button>
+    </form>
+
+    @if (Model.Products?.Any() == true)
+    {
+        <table class="table table-bordered table-striped mt-3">
+            <thead class="table-dark">
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>₹@product.Price</td>
+                        <td>@product.Description</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <hr class="my-5" />
+
+    <!-- ===================== -->
+    <!-- 📤 IMAGE UPLOAD -->
+    <!-- ===================== -->
+    <h2 class="mb-3">📤 Upload Static Image</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-6">
+                <input type="file" name="ImageFile" class="form-control" required />
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-primary w-100">
+                    Upload Image
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <hr class="my-4" />
+
+    <!-- ===================== -->
+    <!-- 🖼 LOAD IMAGES -->
+    <!-- ===================== -->
+    <form method="post" asp-page-handler="LoadImages">
+        <button class="btn btn-success mb-3">
+            Load Images
+        </button>
+    </form>
+
+    @if (Model.ImageUrls?.Any() == true)
+    {
+        <div class="row">
+            @foreach (var image in Model.ImageUrls)
+            {
+                <div class="col-md-4 mb-4">
+                    <img src="@image"
+                         class="img-fluid rounded shadow"
+                         alt="Uploaded Image" />
+                </div>
+            }
+        </div>
+    }
+    <hr />
+    <h3>Process Order (Async via Azure Function)</h3>
+
+    <form method="post" asp-page-handler="CallFunction">
+        <div class="mb-2">
+            <label>Order ID</label>
+            <input type="text" name="OrderId" class="form-control" required />
+        </div>
+
+        <div class="mb-2">
+            <label>Status</label>
+            <input type="text" name="Status" class="form-control" value="Placed" />
+        </div>
+
+        <button type="submit" class="btn btn-success">
+            Send to Azure Function
+        </button>
+    </form>
+</div>
