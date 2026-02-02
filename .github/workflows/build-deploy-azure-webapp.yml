@@ -5,9 +5,16 @@ on:
     branches:
       - main
   workflow_dispatch:
-
+  inputs: 
+    branch:
+      description: 'branch to deploy'
+      required: false
+      default: 'main'
+env:
+  dotnet_version: '10.0.x'
+  AZURE_WEBAPP_NAME: 'as-app-dev'
 jobs:
-  build-and-deploy:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +24,7 @@ jobs:
     - name: Set up .NET SDK
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '10.0.x'
 
     - name: Restore dependencies
       run: dotnet restore
@@ -25,7 +32,7 @@ jobs:
     - name: Build application
       run: dotnet build --configuration Release --no-restore
 
-    - name: Run tests
+    - name: Run automated tests
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish application
