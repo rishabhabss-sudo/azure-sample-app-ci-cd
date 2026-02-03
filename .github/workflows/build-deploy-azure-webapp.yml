@@ -30,13 +30,13 @@ jobs:
       run: dotnet restore
 
     - name: Build application
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build ./AzureSampleApp.csproj --configuration Release --no-restore
 
     - name: Run automated tests
       run: dotnet test --no-build --verbosity normal
 
     - name: Publish application
-      run: dotnet publish -c Release -o ./publish
+      run: dotnet publish ./AzureSampleApp.csproj -c Release -o ./publish
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v3
