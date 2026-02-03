@@ -20,10 +20,23 @@ builder.Services.AddSingleton(_ =>
 	var accountUrl = config["BlobStorage:AccountUrl"];
 	var sasToken = config["BlobStorage:SasToken"];
 
-	return new BlobServiceClient(
-		new Uri(accountUrl),
-		new AzureSasCredential(sasToken.Replace("?", ""))
-	);
+	if (string.IsNullOrWhiteSpace(accountUrl))
+	{
+		throw new InvalidOperationException("Storage account URL is missing.");
+	}
+
+	if (string.IsNullOrWhiteSpace(sasToken))
+	{
+		throw new InvalidOperationException("SAS token is missing.");
+	}
+
+    // Ensure SAS token does NOT start with '?'
+    sasToken = sasToken.TrimStart('?');
+
+    return new BlobServiceClient(
+        new Uri(accountUrl),
+        new AzureSasCredential(sasToken)
+    );
 });
 
 var app = builder.Build();
