@@ -74,9 +74,9 @@ public class IndexModel : PageModel
 		var rawSas = _configuration["BlobStorage:SasToken"];
 
 		// ensure only ONE ?
-		var sasToken = rawSas.StartsWith("?")
-			? rawSas
-			: "?" + rawSas;
+		var sasToken = string.IsNullOrWhiteSpace(rawSas)
+    		? string.Empty
+    		: (rawSas.StartsWith("?") ? rawSas : "?" + rawSas);
 
 		await foreach (var blob in container.GetBlobsAsync())
 		{
