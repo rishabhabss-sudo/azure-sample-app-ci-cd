@@ -5,11 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
-  inputs: 
-    branch:
-      description: 'branch to deploy'
-      required: false
-      default: 'main'
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'dev'
 env:
   dotnet_version: '10.0.x'
   AZURE_WEBAPP_NAME: 'as-app-dev'
